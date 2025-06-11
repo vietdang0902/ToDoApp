@@ -2,10 +2,12 @@
 //  NewItemViewModel.swift
 //  ToDoApp
 //
-//  Created by VietMac on 10/6/25.
+//  Created by VietMac
 //
 
 import Foundation
+import FirebaseAuth
+import FirebaseFirestore
 
 class NewItemViewModel: ObservableObject {
     @Published var title = ""
@@ -14,7 +16,30 @@ class NewItemViewModel: ObservableObject {
     init() {}
     
     func save() {
+        guard canSave else {
+            return
+        }
         
+        // Get current user id
+        guard let uId = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        //Ceate model
+        let newId = UUID().uuidString
+        let newItem = ToDoListItem(id: newId,
+                                   title: title,
+                                   dueDate: dueDate.timeIntervalSince1970,
+                                   createdDate: dueDate.timeIntervalSince1970,
+                                   isDone: false)
+        
+        // Save model
+        let db = Firestore.firestore()
+        db.collection("users")
+            .document(uId)
+            .collection("todos")
+            .document(newId)
+            .setData(newItem.asDict())
     }
     
     var canSave: Bool {

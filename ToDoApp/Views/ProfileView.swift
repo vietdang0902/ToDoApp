@@ -11,17 +11,18 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
 
     var body: some View {
-        ZStack {
-            Color.customPinkColor.opacity(0.2)
-                .ignoresSafeArea(edges: .all)
-            if let user = viewModel.user {
-                profileLoginView(user: user)
-            } else {
-                Text("Loading User..")
+        NavigationView {
+            ZStack {
+                if let user = viewModel.user {
+                    profileLoginView(user: user)
+                } else {
+                    Text("Loading User..")
+                }
             }
-        }
-        .onAppear {
-            viewModel.fetchUser()
+            .onAppear {
+                viewModel.fetchUser()
+            }
+            .navigationTitle("Profile")
         }
     }
 
@@ -29,23 +30,37 @@ struct ProfileView: View {
     func profileLoginView(user: TKUser) -> some View {
         VStack(spacing: 30) {
             VStack(spacing: 16) {
-                Image(systemName: "person.circle.fill")
+                Image(systemName: "person.crop.circle")
                     .resizable()
                     .foregroundColor(.blue)
                     .frame(width: 80, height: 80)
-                    .padding(.top, 40)
+                    .padding(.top, 20)
 
-                Text(user.name)
-                    .font(.title)
-                    .fontWeight(.semibold)
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Name: ")
+                            .bold()
+                        Text(user.name)
+                            .font(.title2)
+                    }
+                    .padding()
 
-                Text(user.email)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+                    HStack {
+                        Text("Email: ")
+                            .bold()
+                        Text(user.email)
+                            .font(.title3)
+                    }
+                    .padding()
 
-                Text("Date of joining: \(Date(timeIntervalSince1970: user.joined))")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
+                    HStack(alignment: .top) {
+                        Text("Member since: ")
+                            .bold()
+                        Text("\(Date(timeIntervalSince1970: user.joined).formatted(date: .abbreviated, time: .shortened))")
+                            .font(.title3)
+                    }
+                    .padding()
+                }
             }
 
             Spacer()
@@ -56,12 +71,11 @@ struct ProfileView: View {
                 Text("Sign Out")
                     .font(.headline)
                     .foregroundColor(.white)
-                    .frame(width: 250, height: 50)
+                    .frame(width: 200, height: 40)
                     .background(Color.red)
                     .cornerRadius(12)
-                    .shadow(radius: 4)
             }
-            .padding(.bottom, 50)
+            .padding(.bottom, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()

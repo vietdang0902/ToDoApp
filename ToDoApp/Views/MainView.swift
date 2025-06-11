@@ -24,11 +24,7 @@ struct MainView: View {
         TabView {
             ToDoListView(userId: viewModel.currentUserId)
                 .tabItem {
-                    Image(systemName: "checkmark")
-                }
-            CalendarView()
-                .tabItem {
-                    Image(systemName: "calendar")
+                    Image(systemName: "house")
                 }
             ProfileView()
                 .tabItem {
