@@ -12,17 +12,17 @@ struct LoginView: View {
     
     var body: some View {
         VStack {
+            
+            Text("To Do List")
+                .bold()
+                .font(.system(size: 40))
+            Text("Get things done")
+                .font(.system(size: 25))
             Image("login")
                 .resizable()
                 .frame(width: 200,height: 200)
             
             VStack {
-                Text("Login")
-                    .bold()
-                    .font(.title)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 20)
-                
                 if !viewModel.errorMessage.isEmpty {
                     Text(viewModel.errorMessage)
                 }
